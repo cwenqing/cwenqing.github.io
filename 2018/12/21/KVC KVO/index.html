@@ -4,7 +4,7 @@
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     
-    <title>C_wenqing</title>
+    <title>说一下KVC和KVO | C_wenqing</title>
     <meta name="renderer" content="webkit">
     <meta name="HandheldFriendly" content="True">
     <meta name="MobileOptimized" content="320">
@@ -12,24 +12,24 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-    <meta name="description" content="title: 说一下KVC和KVO说一下KVC和KVO本篇采用简单的例子，来介绍 iOS 中的 KVC 和 KVO 的用法和实现原理。  
+    <meta name="description" content="说一下KVC和KVO本篇采用简单的例子，来介绍 iOS 中的 KVC 和 KVO 的用法和实现原理。  
 一、KVC1. KVC是什么KVC 即 Key-Value Coding，翻译成键值编码。它是一种不通过存取方法，而通过属性名称字符串间接访问属性的机制。
 2. KVC的用法KVC 常用到的方法有下面几个：
-12345- (id)valueForKey:(N">
+12345- (id)valueForKey:(NSString *)key;  -">
 
     <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="C_wenqing">
-    <meta name="twitter:description" content="title: 说一下KVC和KVO说一下KVC和KVO本篇采用简单的例子，来介绍 iOS 中的 KVC 和 KVO 的用法和实现原理。  
+    <meta name="twitter:title" content="说一下KVC和KVO | C_wenqing">
+    <meta name="twitter:description" content="说一下KVC和KVO本篇采用简单的例子，来介绍 iOS 中的 KVC 和 KVO 的用法和实现原理。  
 一、KVC1. KVC是什么KVC 即 Key-Value Coding，翻译成键值编码。它是一种不通过存取方法，而通过属性名称字符串间接访问属性的机制。
 2. KVC的用法KVC 常用到的方法有下面几个：
-12345- (id)valueForKey:(N">
+12345- (id)valueForKey:(NSString *)key;  -">
 
     <meta property="og:type" content="article">
-    <meta property="og:title" content="C_wenqing">
-    <meta property="og:description" content="title: 说一下KVC和KVO说一下KVC和KVO本篇采用简单的例子，来介绍 iOS 中的 KVC 和 KVO 的用法和实现原理。  
+    <meta property="og:title" content="说一下KVC和KVO | C_wenqing">
+    <meta property="og:description" content="说一下KVC和KVO本篇采用简单的例子，来介绍 iOS 中的 KVC 和 KVO 的用法和实现原理。  
 一、KVC1. KVC是什么KVC 即 Key-Value Coding，翻译成键值编码。它是一种不通过存取方法，而通过属性名称字符串间接访问属性的机制。
 2. KVC的用法KVC 常用到的方法有下面几个：
-12345- (id)valueForKey:(N">
+12345- (id)valueForKey:(NSString *)key;  -">
 
     
     <meta name="author" content="C_wenqing">
@@ -144,12 +144,11 @@
       </span> 
    
     </div>
-    <h1 class="post-title"></h1>
+    <h1 class="post-title">说一下KVC和KVO</h1>
   </header>
 
   <section class="post">
-    <hr>
-<h2 id="title-说一下KVC和KVO"><a href="#title-说一下KVC和KVO" class="headerlink" title="title: 说一下KVC和KVO"></a>title: 说一下KVC和KVO</h2><h1 id="说一下KVC和KVO"><a href="#说一下KVC和KVO" class="headerlink" title="说一下KVC和KVO"></a>说一下KVC和KVO</h1><p><img src="https://lymanli-1258009115.cos.ap-guangzhou.myqcloud.com/image/blog/kvc-kvo.jpg" alt="avatar"><br>本篇采用简单的例子，来介绍 iOS 中的 KVC 和 KVO 的用法和实现原理。  </p>
+    <h1 id="说一下KVC和KVO"><a href="#说一下KVC和KVO" class="headerlink" title="说一下KVC和KVO"></a>说一下KVC和KVO</h1><p><img src="https://lymanli-1258009115.cos.ap-guangzhou.myqcloud.com/image/blog/kvc-kvo.jpg" alt="avatar"><br>本篇采用简单的例子，来介绍 iOS 中的 KVC 和 KVO 的用法和实现原理。  </p>
 <h1 id="一、KVC"><a href="#一、KVC" class="headerlink" title="一、KVC"></a>一、KVC</h1><h2 id="1-KVC是什么"><a href="#1-KVC是什么" class="headerlink" title="1. KVC是什么"></a>1. KVC是什么</h2><p>KVC 即 Key-Value Coding，翻译成键值编码。它是一种不通过存取方法，而通过属性名称字符串间接访问属性的机制。</p>
 <h2 id="2-KVC的用法"><a href="#2-KVC的用法" class="headerlink" title="2. KVC的用法"></a>2. KVC的用法</h2><p>KVC 常用到的方法有下面几个：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">- (id)valueForKey:(NSString *)key;  </span><br><span class="line">- (void)setValue:(nullable id)value forKey:(NSString *)key;  </span><br><span class="line">  </span><br><span class="line">- (nullable id)valueForKeyPath:(NSString *)keyPath;  </span><br><span class="line">- (void)setValue:(nullable id)value forKeyPath:(NSString *)keyPath;</span><br></pre></td></tr></table></figure>
@@ -238,7 +237,7 @@
 
             <footer class="footer">
     <span class="footer__copyright">
-        &copy; 2018 C_wenqing
+        &copy; 2019 C_wenqing
        
     </span>
     <span class="footer__copyright">
