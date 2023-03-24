@@ -1,104 +1,298 @@
-<!DOCTYPE HTML>
-<html>
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
 <head>
-  <meta charset="utf-8">
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="说一下KVC和KVO本篇采用简单的例子，来介绍 iOS 中的 KVC 和 KVO 的用法和实现原理。   一、KVC1. KVC是什么KVC 即 Key-Value Coding，翻译成键值编码。它是一种不通过存取方法，而通过属性名称字符串间接访问属性的机制。 2. KVC的用法KVC 常用到的方法有下面几个： 12345- (id)valueForKey:(NSString *)key;  -">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://example.com/2023/03/24/2023:3:24/KVC%20KVO/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="说一下KVC和KVO本篇采用简单的例子，来介绍 iOS 中的 KVC 和 KVO 的用法和实现原理。   一、KVC1. KVC是什么KVC 即 Key-Value Coding，翻译成键值编码。它是一种不通过存取方法，而通过属性名称字符串间接访问属性的机制。 2. KVC的用法KVC 常用到的方法有下面几个： 12345- (id)valueForKey:(NSString *)key;  -">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://lymanli-1258009115.cos.ap-guangzhou.myqcloud.com/image/blog/kvc-kvo.jpg">
+<meta property="article:published_time" content="2023-03-24T03:56:52.084Z">
+<meta property="article:modified_time" content="2023-03-24T03:56:52.085Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://lymanli-1258009115.cos.ap-guangzhou.myqcloud.com/image/blog/kvc-kvo.jpg">
+  
+  
   
   <title>Hexo</title>
 
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
   
-  <meta name="author" content="John Doe">
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
   
 
-  
-  <meta name="description" content="说一下KVC和KVO本篇采用简单的例子，来介绍 iOS 中的 KVC 和 KVO 的用法和实现原理。  
-一、KVC1. KVC是什么KVC 即 Key-Value Coding，翻译成键值编码。它是一种不通过存取方法，而通过属性名称字符串间接访问属性的机制。
-2. KVC的用法KVC 常用到的方法">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
   
 
-  
-  
-  <meta name="keywords" content="">
-  
-
-  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
   
-
-  <meta property="og:site_name" content="Hexo"/>
-
-  
-  <meta property="og:image" content="/favicon.ico"/>
-  
-
-  <link href="/favicon.ico" rel="icon">
-  <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
-  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
 <meta name="generator" content="Hexo 6.3.0"></head>
 
 
 <body>
-<div class="blog">
-  <div class="content">
+  
 
-    <header>
-  <div class="site-branding">
-    <h1 class="site-title">
-      <a href="/">Hexo</a>
-    </h1>
-    <p class="site-description"></p>
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
   </div>
-  <nav class="site-navigation">
-    <ul>
-      
-    </ul>
-  </nav>
-</header>
-
-    <main class="site-main posts-loop">
-    <article>
+</nav>
 
   
-    
-    <h3 class="article-title"><span></span></h3>
-    
-  
 
-  <div class="article-top-meta">
-    <span class="posted-on">
-      <a href="/2023/03/24/2023:3:24/KVC KVO/" rel="bookmark">
-        <time class="entry-date published" datetime="2023-03-24T03:56:52.084Z">
-          2023-03-24
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text=""></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-03-24 11:56" pubdate>
+          March 24, 2023 am
         </time>
-      </a>
-    </span>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          5.6k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          47 mins
+        
+      </span>
+    
+
+    
+    
   </div>
 
 
-  
+        
+      </div>
 
-  <div class="article-content">
-    <div class="entry">
       
-        <h1 id="说一下KVC和KVO"><a href="#说一下KVC和KVO" class="headerlink" title="说一下KVC和KVO"></a>说一下KVC和KVO</h1><p><img src="https://lymanli-1258009115.cos.ap-guangzhou.myqcloud.com/image/blog/kvc-kvo.jpg" alt="avatar"><br>本篇采用简单的例子，来介绍 iOS 中的 KVC 和 KVO 的用法和实现原理。  </p>
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none"></h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="说一下KVC和KVO"><a href="#说一下KVC和KVO" class="headerlink" title="说一下KVC和KVO"></a>说一下KVC和KVO</h1><p><img src="https://lymanli-1258009115.cos.ap-guangzhou.myqcloud.com/image/blog/kvc-kvo.jpg" srcset="/img/loading.gif" lazyload alt="avatar"><br>本篇采用简单的例子，来介绍 iOS 中的 KVC 和 KVO 的用法和实现原理。  </p>
 <h1 id="一、KVC"><a href="#一、KVC" class="headerlink" title="一、KVC"></a>一、KVC</h1><h2 id="1-KVC是什么"><a href="#1-KVC是什么" class="headerlink" title="1. KVC是什么"></a>1. KVC是什么</h2><p>KVC 即 Key-Value Coding，翻译成键值编码。它是一种不通过存取方法，而通过属性名称字符串间接访问属性的机制。</p>
 <h2 id="2-KVC的用法"><a href="#2-KVC的用法" class="headerlink" title="2. KVC的用法"></a>2. KVC的用法</h2><p>KVC 常用到的方法有下面几个：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">- (id)valueForKey:(NSString *)key;  </span><br><span class="line">- (void)setValue:(nullable id)value forKey:(NSString *)key;  </span><br><span class="line">  </span><br><span class="line">- (nullable id)valueForKeyPath:(NSString *)keyPath;  </span><br><span class="line">- (void)setValue:(nullable id)value forKeyPath:(NSString *)keyPath;</span><br></pre></td></tr></table></figure>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs erlang">- <span class="hljs-params">(id)</span>valueForKey:<span class="hljs-params">(NSString *)</span>key;  <br>- <span class="hljs-params">(void)</span>setValue:<span class="hljs-params">(nullable id)</span>value forKey:<span class="hljs-params">(NSString *)</span>key;  <br>  <br>- <span class="hljs-params">(nullable id)</span>valueForKeyPath:<span class="hljs-params">(NSString *)</span>keyPath;  <br>- <span class="hljs-params">(void)</span>setValue:<span class="hljs-params">(nullable id)</span>value forKeyPath:<span class="hljs-params">(NSString *)</span>keyPath;<br></code></pre></td></tr></table></figure>
 <p>前面的两个方法，以字符串的形式传入对象属性即可调用。<strong>私有属性也可以调用</strong>。如下代码所示：  </p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">// 先声明一个对象ObjectA，同时具备私有属性和公有属性  </span><br><span class="line">// ObjectA.h  </span><br><span class="line">@interface ObjectA : NSObject  </span><br><span class="line">  </span><br><span class="line">@property (nonatomic, strong) NSString *publicPropertyString;  </span><br><span class="line">  </span><br><span class="line">@end  </span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line">// ObjectA.m  </span><br><span class="line">@interface ObjectA ()  </span><br><span class="line">  </span><br><span class="line">@property (nonatomic, assign) NSInteger privatePropertyInteger;  </span><br><span class="line">  </span><br><span class="line">@end  </span><br><span class="line">  </span><br><span class="line">@implementation ObjectA  </span><br><span class="line">  </span><br><span class="line">- (instancetype)init &#123;  </span><br><span class="line">    </span><br><span class="line">    self = [super init];  </span><br><span class="line">    if (self) &#123;  </span><br><span class="line">        self.publicPropertyString = @&quot;publicPropertyString&quot;;  </span><br><span class="line">        self.privatePropertyInteger = 2000; </span><br><span class="line">    &#125;  </span><br><span class="line">    return self;  </span><br><span class="line">&#125;  </span><br><span class="line">  </span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs objectivec"><span class="hljs-comment">// 先声明一个对象ObjectA，同时具备私有属性和公有属性  </span><br><span class="hljs-comment">// ObjectA.h  </span><br><span class="hljs-class"><span class="hljs-keyword">@interface</span> <span class="hljs-title">ObjectA</span> : <span class="hljs-title">NSObject</span>  </span><br>  <br><span class="hljs-keyword">@property</span> (<span class="hljs-keyword">nonatomic</span>, <span class="hljs-keyword">strong</span>) <span class="hljs-built_in">NSString</span> *publicPropertyString;  <br>  <br><span class="hljs-keyword">@end</span>  <br>  <br>  <br><span class="hljs-comment">// ObjectA.m  </span><br><span class="hljs-class"><span class="hljs-keyword">@interface</span> <span class="hljs-title">ObjectA</span> ()  </span><br>  <br><span class="hljs-keyword">@property</span> (<span class="hljs-keyword">nonatomic</span>, <span class="hljs-keyword">assign</span>) <span class="hljs-built_in">NSInteger</span> privatePropertyInteger;  <br>  <br><span class="hljs-keyword">@end</span>  <br>  <br><span class="hljs-class"><span class="hljs-keyword">@implementation</span> <span class="hljs-title">ObjectA</span>  </span><br>  <br>- (<span class="hljs-keyword">instancetype</span>)init &#123;  <br>    <br>    <span class="hljs-keyword">self</span> = [<span class="hljs-variable language_">super</span> init];  <br>    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">self</span>) &#123;  <br>        <span class="hljs-keyword">self</span>.publicPropertyString = <span class="hljs-string">@&quot;publicPropertyString&quot;</span>;  <br>        <span class="hljs-keyword">self</span>.privatePropertyInteger = <span class="hljs-number">2000</span>; <br>    &#125;  <br>    <span class="hljs-keyword">return</span> <span class="hljs-keyword">self</span>;  <br>&#125;  <br>  <br><span class="hljs-keyword">@end</span><br></code></pre></td></tr></table></figure>
 
 
 
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">// 尝试调用  </span><br><span class="line">ObjectA *objectA = [[ObjectA alloc] init];  </span><br><span class="line">  </span><br><span class="line">// 以下输出：publicPropertyString   </span><br><span class="line">NSLog(@&quot;%@&quot;, [objectA valueForKey:@&quot;publicPropertyString&quot;]);   </span><br><span class="line">  </span><br><span class="line">// 以下输出：2000   </span><br><span class="line">NSLog(@&quot;%@&quot;, [objectA valueForKey:@&quot;privatePropertyInteger&quot;]);   </span><br><span class="line">    </span><br><span class="line">// 将999赋值给privatePropertyInteger  </span><br><span class="line">[objectA setValue:@(999) forKey:@&quot;privatePropertyInteger&quot;];  </span><br><span class="line">  </span><br><span class="line">// 以下输出：999  </span><br><span class="line">NSLog(@&quot;%@&quot;, [objectA valueForKey:@&quot;privatePropertyInteger&quot;]);</span><br></pre></td></tr></table></figure>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs reasonml"><span class="hljs-comment">// 尝试调用  </span><br>ObjectA *objectA = <span class="hljs-literal">[[O<span class="hljs-identifier">bjectA</span> <span class="hljs-identifier">alloc</span>]</span> init];  <br>  <br><span class="hljs-comment">// 以下输出：publicPropertyString   </span><br><span class="hljs-constructor">NSLog(@<span class="hljs-string">&quot;%@&quot;</span>, [<span class="hljs-params">objectA</span> <span class="hljs-params">valueForKey</span>:@<span class="hljs-string">&quot;publicPropertyString&quot;</span>])</span>;   <br>  <br><span class="hljs-comment">// 以下输出：2000   </span><br><span class="hljs-constructor">NSLog(@<span class="hljs-string">&quot;%@&quot;</span>, [<span class="hljs-params">objectA</span> <span class="hljs-params">valueForKey</span>:@<span class="hljs-string">&quot;privatePropertyInteger&quot;</span>])</span>;   <br>    <br><span class="hljs-comment">// 将999赋值给privatePropertyInteger  </span><br><span class="hljs-literal">[<span class="hljs-identifier">objectA</span> <span class="hljs-identifier">setValue</span>:@(<span class="hljs-number">999</span>) <span class="hljs-identifier">forKey</span>:@&quot;<span class="hljs-identifier">privatePropertyInteger</span>&quot;]</span>;  <br>  <br><span class="hljs-comment">// 以下输出：999  </span><br><span class="hljs-constructor">NSLog(@<span class="hljs-string">&quot;%@&quot;</span>, [<span class="hljs-params">objectA</span> <span class="hljs-params">valueForKey</span>:@<span class="hljs-string">&quot;privatePropertyInteger&quot;</span>])</span>;<br></code></pre></td></tr></table></figure>
 <p>后面两个方法支持传入用 <code>.</code> 连接的多层级属性，比如 <code>school.schoolmaster.name</code> 。<strong>同样支持私有属性</strong>。如下代码所示：  </p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">// 再声明一个对象ObjectB，具备私有属性ObjectA</span><br><span class="line">// ObjectB.m</span><br><span class="line">@interface ObjectB ()</span><br><span class="line"></span><br><span class="line">@property (nonatomic, strong) ObjectA *objectA;</span><br><span class="line"></span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">@implementation ObjectB</span><br><span class="line"></span><br><span class="line">- (instancetype)init &#123;</span><br><span class="line">    </span><br><span class="line">    self = [super init];</span><br><span class="line">    if (self) &#123;</span><br><span class="line">        self.objectA = [[ObjectA alloc] init];</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    return self;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs objectivec"><span class="hljs-comment">// 再声明一个对象ObjectB，具备私有属性ObjectA</span><br><span class="hljs-comment">// ObjectB.m</span><br><span class="hljs-class"><span class="hljs-keyword">@interface</span> <span class="hljs-title">ObjectB</span> ()</span><br><br><span class="hljs-keyword">@property</span> (<span class="hljs-keyword">nonatomic</span>, <span class="hljs-keyword">strong</span>) ObjectA *objectA;<br><br><span class="hljs-keyword">@end</span><br><br><span class="hljs-class"><span class="hljs-keyword">@implementation</span> <span class="hljs-title">ObjectB</span></span><br><br>- (<span class="hljs-keyword">instancetype</span>)init &#123;<br>    <br>    <span class="hljs-keyword">self</span> = [<span class="hljs-variable language_">super</span> init];<br>    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">self</span>) &#123;<br>        <span class="hljs-keyword">self</span>.objectA = [[ObjectA alloc] init];<br>    &#125;<br>    <br>    <span class="hljs-keyword">return</span> <span class="hljs-keyword">self</span>;<br>&#125;<br><br><span class="hljs-keyword">@end</span><br></code></pre></td></tr></table></figure>
 
 
 
 
 
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// 尝试调用  </span><br><span class="line">ObjectB *objectB = [[ObjectB alloc] init];  </span><br><span class="line">  </span><br><span class="line">// 将999赋值给objectA的属性privatePropertyInteger  </span><br><span class="line">[objectB setValue:@(999) forKeyPath:@&quot;objectA.privatePropertyInteger&quot;];  </span><br><span class="line">  </span><br><span class="line">// 以下输出：999  </span><br><span class="line">NSLog(@&quot;%@&quot;, [objectB valueForKeyPath:@&quot;objectA.privatePropertyInteger&quot;]);</span><br></pre></td></tr></table></figure>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-regexp">//</span> 尝试调用  <br>ObjectB *objectB = [[ObjectB alloc] init];  <br>  <br><span class="hljs-regexp">//</span> 将<span class="hljs-number">999</span>赋值给objectA的属性privatePropertyInteger  <br>[objectB setValue:@(<span class="hljs-number">999</span>) forKeyPath:@<span class="hljs-string">&quot;objectA.privatePropertyInteger&quot;</span>];  <br>  <br><span class="hljs-regexp">//</span> 以下输出：<span class="hljs-number">999</span>  <br>NSLog(@<span class="hljs-string">&quot;%@&quot;</span>, [objectB valueForKeyPath:@<span class="hljs-string">&quot;objectA.privatePropertyInteger&quot;</span>]);<br></code></pre></td></tr></table></figure>
 <p><strong>需要注意</strong>：</p>
 <ul>
 <li>当 <code>value</code> 的值为基本类型时，应该封装为 <code>NSNumber</code> 或 <code>NSValue</code> 。</li>
@@ -117,12 +311,12 @@
 <h1 id="二、KVO"><a href="#二、KVO" class="headerlink" title="二、KVO"></a>二、KVO</h1><h2 id="1-KVO是什么"><a href="#1-KVO是什么" class="headerlink" title="1. KVO是什么"></a>1. KVO是什么</h2><p>KVO 即 <code>Key-Value Observing</code>，翻译成键值观察。它是一种观察者模式的衍生。其基本思想是，对目标对象的某属性添加观察，当该属性发生变化时，通过触发观察者对象实现的KVO接口方法，来自动的通知观察者。</p>
 <h2 id="2-KVO的用法"><a href="#2-KVO的用法" class="headerlink" title="2. KVO的用法"></a>2. KVO的用法</h2><p>KVO的使用主要分为三步：</p>
 <p><strong>第一步，将目标对象添加为观察者。</strong>（注意这里用到了KVC，即通过字符串的方式去访问属性值。）  </p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">- (void)addObserver:(NSObject *)observer  </span><br><span class="line"> forKeyPath:(NSString *)keyPath  </span><br><span class="line"> options:(NSKeyValueObservingOptions)options  </span><br><span class="line"> context:(nullable void *)context;</span><br></pre></td></tr></table></figure>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs objectivec">- (<span class="hljs-type">void</span>)addObserver:(<span class="hljs-built_in">NSObject</span> *)observer  <br> forKeyPath:(<span class="hljs-built_in">NSString</span> *)keyPath  <br> options:(<span class="hljs-built_in">NSKeyValueObservingOptions</span>)options  <br> context:(<span class="hljs-keyword">nullable</span> <span class="hljs-type">void</span> *)context;<br></code></pre></td></tr></table></figure>
 <p><strong>第二步，实现接收通知的接口方法。</strong>  </p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">- (void)observeValueForKeyPath:(nullable NSString *)keyPath  </span><br><span class="line"> ofObject:(nullable id)object  </span><br><span class="line"> change:(nullable NSDictionary&lt;NSKeyValueChangeKey, id&gt; *)change  </span><br><span class="line"> context:(nullable void *)context;</span><br></pre></td></tr></table></figure>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs objectivec">- (<span class="hljs-type">void</span>)observeValueForKeyPath:(<span class="hljs-keyword">nullable</span> <span class="hljs-built_in">NSString</span> *)keyPath  <br> ofObject:(<span class="hljs-keyword">nullable</span> <span class="hljs-type">id</span>)object  <br> change:(<span class="hljs-keyword">nullable</span> <span class="hljs-built_in">NSDictionary</span>&lt;<span class="hljs-built_in">NSKeyValueChangeKey</span>, <span class="hljs-type">id</span>&gt; *)change  <br> context:(<span class="hljs-keyword">nullable</span> <span class="hljs-type">void</span> *)context;<br></code></pre></td></tr></table></figure>
 
 <p><strong>第三步，移除观察者。</strong>  </p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">- (void)removeObserver:(NSObject *)observer</span><br><span class="line"> forKeyPath:(NSString *)keyPath;</span><br></pre></td></tr></table></figure>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs erlang">- <span class="hljs-params">(void)</span>removeObserver:<span class="hljs-params">(NSObject *)</span>observer<br> forKeyPath:<span class="hljs-params">(NSString *)</span>keyPath;<br></code></pre></td></tr></table></figure>
 <p>在第一步中，NSKeyValueObservingOptions类型有四个取值，可以通过 <code>|</code> 来连接多个取值。分别为：</p>
 <ul>
 <li><strong>NSKeyValueObservingOptionNew</strong>，在属性值变化的时候回调，可以在change中取到<strong>变化后</strong>的值。</li>
@@ -131,7 +325,7 @@
 <li><strong>NSKeyValueObservingOptionPrior</strong>，在属性值变化前和变化后各回调一次，拿不到变化前后的值。</li>
 </ul>
 <p>举一个例子：  </p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">@interface ObjectB ()  </span><br><span class="line">  </span><br><span class="line">@property (nonatomic, strong) ObjectA *objectA;  </span><br><span class="line">  </span><br><span class="line">@end  </span><br><span class="line">  </span><br><span class="line">@implementation ObjectB  </span><br><span class="line">  </span><br><span class="line">- (instancetype)init &#123;  </span><br><span class="line">    self = [super init];  </span><br><span class="line">    if (self) &#123;  </span><br><span class="line">        self.objectA = [[ObjectA alloc] init];  </span><br><span class="line">        // 第一步，将目标对象添加为观察者  </span><br><span class="line">        [_objectA addObserver:self  </span><br><span class="line">        forKeyPath:@&quot;privatePropertyInteger&quot; options:NSKeyValueObservingOptionNew context:nil];  </span><br><span class="line">        [_objectA setValue:@(999) forKey:@&quot;privatePropertyInteger&quot;;</span><br><span class="line">    &#125;  </span><br><span class="line">    </span><br><span class="line">    return self;  </span><br><span class="line">&#125;  </span><br><span class="line">  </span><br><span class="line">// 第二步，实现接收通知的接口方法  </span><br><span class="line">- (void)observeValueForKeyPath:(NSString *)keyPath  </span><br><span class="line"> ofObject:(id)object  </span><br><span class="line"> change:(NSDictionary&lt;NSKeyValueChangeKey,id&gt; *)change  </span><br><span class="line"> context:(void *)context &#123;  </span><br><span class="line">    </span><br><span class="line">    // 这里最好判断一下object的类型和keyPath的值，不符合则交给父类处理  </span><br><span class="line">    if ([object isKindOfClass:[ObjectA class]] &amp;&amp;  [keyPath isEqualToString:@&quot;privatePropertyInteger&quot;]) &#123;  </span><br><span class="line">        NSLog(@&quot;%@&quot;, change);  // 这里可以读取到 new = 999  </span><br><span class="line">    &#125; else &#123;  </span><br><span class="line">        [super observeValueForKeyPath:keyPath ofObject:object change:change  context:context\];  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;  </span><br><span class="line">  </span><br><span class="line">// 第三步，移除观察者。  </span><br><span class="line">- (void) dealloc &#123;  </span><br><span class="line">    </span><br><span class="line">    [_objectA removeObserver:self  forKeyPath:@&quot;privatePropertyInteger&quot;\];  </span><br><span class="line">&#125;  </span><br><span class="line">  </span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><code class="hljs objectivec"><span class="hljs-class"><span class="hljs-keyword">@interface</span> <span class="hljs-title">ObjectB</span> ()  </span><br>  <br><span class="hljs-keyword">@property</span> (<span class="hljs-keyword">nonatomic</span>, <span class="hljs-keyword">strong</span>) ObjectA *objectA;  <br>  <br><span class="hljs-keyword">@end</span>  <br>  <br><span class="hljs-class"><span class="hljs-keyword">@implementation</span> <span class="hljs-title">ObjectB</span>  </span><br>  <br>- (<span class="hljs-keyword">instancetype</span>)init &#123;  <br>    <span class="hljs-keyword">self</span> = [<span class="hljs-variable language_">super</span> init];  <br>    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">self</span>) &#123;  <br>        <span class="hljs-keyword">self</span>.objectA = [[ObjectA alloc] init];  <br>        <span class="hljs-comment">// 第一步，将目标对象添加为观察者  </span><br>        [_objectA addObserver:<span class="hljs-keyword">self</span>  <br>        forKeyPath:<span class="hljs-string">@&quot;privatePropertyInteger&quot;</span> options:<span class="hljs-built_in">NSKeyValueObservingOptionNew</span> context:<span class="hljs-literal">nil</span>];  <br>        [_objectA setValue:@(<span class="hljs-number">999</span>) forKey:<span class="hljs-string">@&quot;privatePropertyInteger&quot;</span>;<br>    &#125;  <br>    <br>    <span class="hljs-keyword">return</span> <span class="hljs-keyword">self</span>;  <br>&#125;  <br>  <br><span class="hljs-comment">// 第二步，实现接收通知的接口方法  </span><br>- (<span class="hljs-type">void</span>)observeValueForKeyPath:(<span class="hljs-built_in">NSString</span> *)keyPath  <br> ofObject:(<span class="hljs-type">id</span>)object  <br> change:(<span class="hljs-built_in">NSDictionary</span>&lt;<span class="hljs-built_in">NSKeyValueChangeKey</span>,<span class="hljs-type">id</span>&gt; *)change  <br> context:(<span class="hljs-type">void</span> *)context &#123;  <br>    <br>    <span class="hljs-comment">// 这里最好判断一下object的类型和keyPath的值，不符合则交给父类处理  </span><br>    <span class="hljs-keyword">if</span> ([object isKindOfClass:[ObjectA <span class="hljs-keyword">class</span>]] &amp;&amp;  [keyPath isEqualToString:<span class="hljs-string">@&quot;privatePropertyInteger&quot;</span>]) &#123;  <br>        <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@&quot;%@&quot;</span>, change);  <span class="hljs-comment">// 这里可以读取到 new = 999  </span><br>    &#125; <span class="hljs-keyword">else</span> &#123;  <br>        [<span class="hljs-variable language_">super</span> observeValueForKeyPath:keyPath ofObject:object change:change  context:context\];  <br>    &#125;  <br>&#125;  <br>  <br><span class="hljs-comment">// 第三步，移除观察者。  </span><br>- (<span class="hljs-type">void</span>) dealloc &#123;  <br>    <br>    [_objectA removeObserver:<span class="hljs-keyword">self</span>  forKeyPath:<span class="hljs-string">@&quot;privatePropertyInteger&quot;</span>\];  <br>&#125;  <br>  <br><span class="hljs-keyword">@end</span><br></code></pre></td></tr></table></figure>
 
 
 <p>KVO可以在MVC模式中得到很好的应用。因为当Model发生变化时，通过KVO可以很方便地通知到Controller，从而通过Controller来改变View的展示。所以说<strong>KVO是解决Model和View同步的好办法。</strong></p>
@@ -139,35 +333,139 @@
 <p><strong>当某个类的对象第一次被观察时，系统就会在运行期动态地创建该类的一个派生类，在这个派生类中重写这个类中任何被观察属性的 setter 方法。</strong></p>
 <p>即当一个类型为 ObjectA 的对象，被添加了观察后，系统会生成一个 NSKVONotifying_ObjectA 类，并将对象的isa指针指向新的类，也就是说这个对象的类型发生了变化。这个类相比较于ObjectA，会重写以下几个方法。</p>
 <h3 id="1-重写setter"><a href="#1-重写setter" class="headerlink" title="1. 重写setter"></a>1. 重写setter</h3><p>在 setter 中，会添加以下两个方法的调用。  </p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">- (void)willChangeValueForKey:(NSString *)key;  </span><br><span class="line">- (void)didChangeValueForKey:(NSString *)key;</span><br></pre></td></tr></table></figure>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs erlang">- <span class="hljs-params">(void)</span>willChangeValueForKey:<span class="hljs-params">(NSString *)</span>key;  <br>- <span class="hljs-params">(void)</span>didChangeValueForKey:<span class="hljs-params">(NSString *)</span>key;<br></code></pre></td></tr></table></figure>
 <p>然后在 <code>didChangeValueForKey:</code> 中，去调用：  </p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">- (void)observeValueForKeyPath:(nullable NSString *)keyPath  </span><br><span class="line"> ofObject:(nullable id)object  </span><br><span class="line"> change:(nullable NSDictionary&lt;NSKeyValueChangeKey, id&gt; *)change  </span><br><span class="line"> context:(nullable void *)context;</span><br></pre></td></tr></table></figure>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs objectivec">- (<span class="hljs-type">void</span>)observeValueForKeyPath:(<span class="hljs-keyword">nullable</span> <span class="hljs-built_in">NSString</span> *)keyPath  <br> ofObject:(<span class="hljs-keyword">nullable</span> <span class="hljs-type">id</span>)object  <br> change:(<span class="hljs-keyword">nullable</span> <span class="hljs-built_in">NSDictionary</span>&lt;<span class="hljs-built_in">NSKeyValueChangeKey</span>, <span class="hljs-type">id</span>&gt; *)change  <br> context:(<span class="hljs-keyword">nullable</span> <span class="hljs-type">void</span> *)context;<br></code></pre></td></tr></table></figure>
 
 
 <p>于是实现了属性值修改的通知。因为 KVO 的原理是修改 setter 方法，因此使用 KVO 必须调用 setter 。若直接访问属性对象则没有效果。</p>
 <h3 id="2-重写class"><a href="#2-重写class" class="headerlink" title="2. 重写class"></a>2. 重写class</h3><p>当修改了isa指向后，class的返回值不会变，但isa的值则发生改变。  </p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">// 添加Observer之后  </span><br><span class="line">  </span><br><span class="line">// 输出ObjectA  </span><br><span class="line">NSLog(@&quot;%@&quot;, [_objectA class]);   </span><br><span class="line">  </span><br><span class="line">// 输出NSKVONotifying_ObjectA（object_getClass方法返回isa指向）  </span><br><span class="line">NSLog(@&quot;%@&quot;, object_getClass(_objectA));</span><br></pre></td></tr></table></figure>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs reasonml"><span class="hljs-comment">// 添加Observer之后  </span><br>  <br><span class="hljs-comment">// 输出ObjectA  </span><br><span class="hljs-constructor">NSLog(@<span class="hljs-string">&quot;%@&quot;</span>, [<span class="hljs-params">_objectA</span> <span class="hljs-params">class</span>])</span>;   <br>  <br><span class="hljs-comment">// 输出NSKVONotifying_ObjectA（object_getClass方法返回isa指向）  </span><br><span class="hljs-constructor">NSLog(@<span class="hljs-string">&quot;%@&quot;</span>, <span class="hljs-params">object_getClass</span>(<span class="hljs-params">_objectA</span>)</span>);<br></code></pre></td></tr></table></figure>
 <h3 id="3-重写dealloc"><a href="#3-重写dealloc" class="headerlink" title="3. 重写dealloc"></a>3. 重写dealloc</h3><p>系统重写 dealloc 方法来释放资源。</p>
 <h3 id="4-重写-isKVOA"><a href="#4-重写-isKVOA" class="headerlink" title="4. 重写_isKVOA"></a>4. 重写_isKVOA</h3><p>这个私有方法估计是用来标示该类是一个 KVO 机制声称的类。</p>
 <h1 id="参考"><a href="#参考" class="headerlink" title="#参考 "></a>#参考 </h1><p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/66bda10168f1">KVC和KVO的使用及原理</a><br><a target="_blank" rel="noopener" href="http://blog.csdn.net/wzzvictory/article/details/9674431">KVC&#x2F;KVO原理详解及编程指南</a><br><a target="_blank" rel="noopener" href="http://blog.csdn.net/dizzthxl/article/details/9034659">iOS里的KVO模式</a></p>
 
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div></div>
+      <div>http://example.com/2023/03/24/2023:3:24/KVC KVO/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>John Doe</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>March 24, 2023</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
       
     </div>
-
+    <div class="license-icon iconfont"></div>
   </div>
 
-  <div class="article-footer">
-    <div class="article-meta pull-left">
 
-    
 
-    
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/03/24/2023:3:24/iOS%E5%A4%9A%E7%BA%BF%E7%A8%8B/" title="">
+                        <span class="hidden-mobile"></span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
 
+            
+          </article>
+        </div>
+      </div>
     </div>
 
-    
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
   </div>
-</article>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
 
   
 
@@ -177,23 +475,208 @@
 
 
 
+    
 
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
 
-    </main>
-
-    <footer class="site-footer">
-  <p class="site-info">
-    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
-    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
-    </br>
     
-    &copy; 2023 John Doe
-    
-  </p>
-</footer>
-    
-    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
   </div>
 </div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
 </body>
 </html>
