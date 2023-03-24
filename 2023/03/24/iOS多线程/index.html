@@ -113,19 +113,9 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">int main(int argc, const char * argv[]) &#123;</span><br><span class="line">    @autoreleasepool &#123;</span><br><span class="line">        NSLog(@&quot;bengin&quot;);</span><br><span class="line">        for (int i = 0; i &lt; 10000000; i++) &#123;</span><br><span class="line">            NSLog(@&quot;%d&quot;,i);</span><br><span class="line">        &#125;</span><br><span class="line">        NSLog(@&quot;end&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>控制台输出！正在跑中，一亿次！！！先看截图<br>CPU  </p>
-<p>
-        <span class="lazyload-img-span">
-        <img   
-           data-src="https://upload-images.jianshu.io/upload_images/1442184-06d31ec3a9fa3940.jpg" >
-        </sapn>
-      </p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1442184-06d31ec3a9fa3940.jpg" alt="CPU"></p>
 <p>再看内存</p>
-<p>
-        <span class="lazyload-img-span">
-        <img   
-           data-src="https://upload-images.jianshu.io/upload_images/1442184-4618f1e39342f9ec.jpg" >
-        </sapn>
-      </p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1442184-4618f1e39342f9ec.jpg" alt="内存"></p>
 <p>好吧，还在跑，现在已经达到10分钟了，怕心疼本本炸掉！stop。。。<br><code>结论五：I/O操作非常慢，一亿次10分钟也没能跑完！</code></p>
 <blockquote>
 <p> <strong><code>最终结论：通过以上结论一、二、三、四、五得出一个结论，各个区的执行效率：栈区&gt;常量区&gt;堆区&gt;I/O操作。同时也说明了一个问题，执行不同的方法会产什么耗时操作。这是，为了解决耗时操作问题，多线程闪亮诞生！</code></strong></p>
@@ -136,19 +126,9 @@
 <h3 id="3-2-线程"><a href="#3-2-线程" class="headerlink" title="3.2 线程"></a>3.2 线程</h3><h4 id="3-2-1-线程的概念："><a href="#3-2-1-线程的概念：" class="headerlink" title="3.2.1 线程的概念："></a>3.2.1 线程的概念：</h4><p><code>线程是进程的执行任务的基本单元，一个进程的所有任务都是在线程中执行的。（每一个进程至少要有一条线程）。</code></p>
 <h4 id="3-2-2-线程的特点："><a href="#3-2-2-线程的特点：" class="headerlink" title="3.2.2 线程的特点："></a>3.2.2 线程的特点：</h4><p><code>线程在执行任务的时候是按顺序执行的。如果要让一条线程执行多个任务，那么只能一个一个地并且按顺序执行这些任务。也就是说，在同一时间，一条线程只能执行一个任务。</code></p>
 <p>我们可以通过Mac中的活动监视器查看进程和线程，下图！</p>
-<p>
-        <span class="lazyload-img-span">
-        <img   
-           data-src="https://upload-images.jianshu.io/upload_images/1442184-c62105f160632064.jpg" >
-        </sapn>
-      </p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1442184-c62105f160632064.jpg" alt="活动监视器"></p>
 <h2 id="4、多线程的概念及原理"><a href="#4、多线程的概念及原理" class="headerlink" title="4、多线程的概念及原理"></a>4、多线程的概念及原理</h2><h3 id="4-1-多线程概念："><a href="#4-1-多线程概念：" class="headerlink" title="4.1 多线程概念："></a>4.1 多线程概念：</h3><p><code>1个进程可以开启多条线程，多条线程可以同时执行不同的任务。</code></p>
-<h3 id="4-2-多线程原理："><a href="#4-2-多线程原理：" class="headerlink" title="4.2 多线程原理："></a>4.2 多线程原理：</h3><p>
-        <span class="lazyload-img-span">
-        <img   
-           data-src="https://upload-images.jianshu.io/upload_images/1442184-12f342316d03e925.jpg" >
-        </sapn>
-      </p>
+<h3 id="4-2-多线程原理："><a href="#4-2-多线程原理：" class="headerlink" title="4.2 多线程原理："></a>4.2 多线程原理：</h3><p><img src="https://upload-images.jianshu.io/upload_images/1442184-12f342316d03e925.jpg" alt="多线程原理"></p>
 <blockquote>
 <p> <code>前提是在单核CPU的情况下，同一时间，CPU只能处理一条线程，也就是说只有一条线程在执行任务。多线程同时执行，那是不可能的！但是是CPU快速地在多条线程之间进行调度和切换执行任务。如果CPU调度线程的速度足够快，就会造成多条线程同时执行任务的”假象”，这种假象，就被美誉为：多线程!</code></p>
 </blockquote>
@@ -164,12 +144,7 @@
 <h3 id="5-3-Tip"><a href="#5-3-Tip" class="headerlink" title="5.3 Tip"></a>5.3 Tip</h3><ul>
 <li><code>开启新的线程就会消耗资源，但是却可以提高用户体验。在保证良好的用户体验的前提下，可以适当地开线程，一般开3-6条。</code></li>
 </ul>
-<p>
-        <span class="lazyload-img-span">
-        <img   
-           data-src="https://upload-images.jianshu.io/upload_images/1442184-e7872d1d03c64413.jpg" >
-        </sapn>
-      </p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1442184-e7872d1d03c64413.jpg"></p>
 <ul>
 <li><code>开启一条新的线程，默认情况下，一条线程都是占用512KB，但是官方的文档里面给出的说明却不是，为了得出真相，下面做个小小的测试！</code></li>
 </ul>
@@ -186,12 +161,7 @@
 <h2 id="6、主线程"><a href="#6、主线程" class="headerlink" title="6、主线程"></a>6、主线程</h2><h3 id="6-1-主线程的概念："><a href="#6-1-主线程的概念：" class="headerlink" title="6.1 主线程的概念："></a>6.1 主线程的概念：</h3><p><code>一个应用程序在启动运行后，系统会自动开启1条线程，这条称为”主线程”。</code></p>
 <h3 id="6-2-主线程的作用："><a href="#6-2-主线程的作用：" class="headerlink" title="6.2 主线程的作用："></a>6.2 主线程的作用：</h3><p><code>主线程的作用主要用于处理UI界面刷新和UI时间！</code></p>
 <h3 id="6-3-结论："><a href="#6-3-结论：" class="headerlink" title="6.3 结论："></a>6.3 结论：</h3><p> <code>主线程上不能执行耗时操作，这样会造成界面卡顿，给用户一种不好的体验。</code></p>
-<h2 id="7、技术方案"><a href="#7、技术方案" class="headerlink" title="7、技术方案"></a>7、技术方案</h2><p>
-        <span class="lazyload-img-span">
-        <img   
-           data-src="https://upload-images.jianshu.io/upload_images/1442184-958d37ecd73c1caf.jpg" >
-        </sapn>
-      </p>
+<h2 id="7、技术方案"><a href="#7、技术方案" class="headerlink" title="7、技术方案"></a>7、技术方案</h2><p><img src="https://upload-images.jianshu.io/upload_images/1442184-958d37ecd73c1caf.jpg" alt="解决方案"></p>
 <hr>
 <h1 id="二、Pthread"><a href="#二、Pthread" class="headerlink" title="二、Pthread"></a>二、Pthread</h1><h2 id="1、函数"><a href="#1、函数" class="headerlink" title="1、函数"></a></a>1、函数</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pthread_create(pthread_t *restrict, const pthread_attr_t *restrict, void _(_)(void *), void *restrict)</span><br></pre></td></tr></table></figure>
 
@@ -274,18 +244,8 @@
 </blockquote>
 <hr>
 <h1 id="四、互斥锁"><a href="#四、互斥锁" class="headerlink" title="四、互斥锁"></a>四、互斥锁</h1><h2 id="1、访问共享资源引入问题！"><a href="#1、访问共享资源引入问题！" class="headerlink" title="1、访问共享资源引入问题！"></a>1、访问共享资源引入问题！</h2><h3 id="1-1-问题？"><a href="#1-1-问题？" class="headerlink" title="1.1 问题？"></a>1.1 问题？</h3><p> <code>不同的线程要访问共享的资源，而且对共享的资源做操作，由于上面结论得出服务质量和优先级不能决定线程执行的先后顺序，那么问题来了，一个线程对共享资源做了修改，而另外一个线程拿到的是未被修改之前资源，这是这个线程也对该资源做了修改，现在请问，两个线程都对该资源做了不同的修改，那么这个修改应该算谁的？！？！这就是问题所在！！！</code></p>
-<h3 id="1-2-问题分析"><a href="#1-2-问题分析" class="headerlink" title="1.2 问题分析"></a>1.2 问题分析</h3><p>
-        <span class="lazyload-img-span">
-        <img   
-           data-src="https://upload-images.jianshu.io/upload_images/1442184-988b8cc8226a4ebd.jpg" >
-        </sapn>
-      </p>
-<h3 id="1-3-问题解决"><a href="#1-3-问题解决" class="headerlink" title="1.3 问题解决"></a>1.3 问题解决</h3><p>
-        <span class="lazyload-img-span">
-        <img   
-           data-src="https://upload-images.jianshu.io/upload_images/1442184-01f1a111e45054ac.jpg" >
-        </sapn>
-      </p>
+<h3 id="1-2-问题分析"><a href="#1-2-问题分析" class="headerlink" title="1.2 问题分析"></a>1.2 问题分析</h3><p><img src="https://upload-images.jianshu.io/upload_images/1442184-988b8cc8226a4ebd.jpg" alt="image"></p>
+<h3 id="1-3-问题解决"><a href="#1-3-问题解决" class="headerlink" title="1.3 问题解决"></a>1.3 问题解决</h3><p><img src="https://upload-images.jianshu.io/upload_images/1442184-01f1a111e45054ac.jpg" alt="image"></p>
 <p> <code>解决方案很简单，就是用一把锁锁住共享资源，等待线程1对其操作完毕后再打开，让线程2来执行，这就是传说中的互斥锁</code>！！！</p>
 <h2 id="2、互斥锁介绍"><a href="#2、互斥锁介绍" class="headerlink" title="2、互斥锁介绍"></a><a id="2、互斥锁介绍"></a>2、互斥锁介绍</h2><h3 id="2-1-互斥锁代码"><a href="#2-1-互斥锁代码" class="headerlink" title="2.1 互斥锁代码"></a>2.1 互斥锁代码</h3><p><code>@synchronized(锁对象) &#123; 需要锁定的代码 &#125;</code></p>
 <h3 id="2-2-互斥锁的作用"><a href="#2-2-互斥锁的作用" class="headerlink" title="2.2 互斥锁的作用"></a>2.2 互斥锁的作用</h3><p><code>可以防止因多线程执行顺序不定导致的抢夺资源造成的数据安全的问题</code></p>
@@ -324,12 +284,7 @@
 <li>全局队列</li>
 </ul>
 <p>队列的类型</p>
-<p>
-        <span class="lazyload-img-span">
-        <img   
-           data-src="https://upload-images.jianshu.io/upload_images/1442184-aea71e89d504e051.jpg" >
-        </sapn>
-      </p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1442184-aea71e89d504e051.jpg" alt="image"></p>
 <h2 id="3、函数"><a href="#3、函数" class="headerlink" title="3、函数"></a>3、函数</h2><h3 id="3-1-GCD函数"><a href="#3-1-GCD函数" class="headerlink" title="3.1 GCD函数"></a>3.1 GCD函数</h3><h4 id="3-1-1-同步-dispatch-sync"><a href="#3-1-1-同步-dispatch-sync" class="headerlink" title="3.1.1 同步 dispatch_sync"></a>3.1.1 同步 <code>dispatch_sync</code></h4><h5 id="同步：任务会在当前线程执行，因为同步函数不具备开新线程的能力。"><a href="#同步：任务会在当前线程执行，因为同步函数不具备开新线程的能力。" class="headerlink" title="同步：任务会在当前线程执行，因为同步函数不具备开新线程的能力。"></a>同步：任务会在当前线程执行，因为同步函数不具备开新线程的能力。</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">void dispatch_sync(dispatch_queue_t queue, dispatch_block_t block);</span><br></pre></td></tr></table></figure>
 
 
@@ -481,12 +436,7 @@
 <li>并发队列，可以开多条线程，具体开几条由线程池决定</li>
 </ul>
 <p><code>对主队列而言，不管是同步执行还是异步执行，都不会开线程。</code></p>
-<h3 id="最后盗图总结一张"><a href="#最后盗图总结一张" class="headerlink" title="最后盗图总结一张"></a>最后盗图总结一张</h3><p>
-        <span class="lazyload-img-span">
-        <img   
-           data-src="https://upload-images.jianshu.io/upload_images/1442184-2b22e764ef8e39b8.jpg" >
-        </sapn>
-      </p>
+<h3 id="最后盗图总结一张"><a href="#最后盗图总结一张" class="headerlink" title="最后盗图总结一张"></a>最后盗图总结一张</h3><p><img src="https://upload-images.jianshu.io/upload_images/1442184-2b22e764ef8e39b8.jpg" alt="image"></p>
 <hr>
 <h1 id="六、NSOperation"><a href="#六、NSOperation" class="headerlink" title="六、NSOperation"></a>六、NSOperation</h1><h2 id="1、NSOperation简介"><a href="#1、NSOperation简介" class="headerlink" title="1、NSOperation简介"></a>1、NSOperation简介</h2><h3 id="1-1-NSOperation与GCD的区别："><a href="#1-1-NSOperation与GCD的区别：" class="headerlink" title="1.1 NSOperation与GCD的区别："></a>1.1 NSOperation与GCD的区别：</h3><ul>
 <li>OC语言中基于 GCD 的面向对象的封装;</li>

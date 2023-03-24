@@ -10,12 +10,9 @@
   
 
   
-  <meta name="description" content="说一下KVC和KVO
-        
-        
-        
-      本篇采用简单的例子，来介绍 iOS 中的 KVC 和 KVO 的用法和实现原理。  
-一、KVC1. KVC是什么KVC 即 Key-Value Coding，翻译成键值编码。它是一种不通过存取方法，而通过属性名">
+  <meta name="description" content="说一下KVC和KVO本篇采用简单的例子，来介绍 iOS 中的 KVC 和 KVO 的用法和实现原理。  
+一、KVC1. KVC是什么KVC 即 Key-Value Coding，翻译成键值编码。它是一种不通过存取方法，而通过属性名称字符串间接访问属性的机制。
+2. KVC的用法KVC 常用到的方法">
   
 
   
@@ -84,12 +81,7 @@
   <div class="article-content">
     <div class="entry">
       
-        <h1 id="说一下KVC和KVO"><a href="#说一下KVC和KVO" class="headerlink" title="说一下KVC和KVO"></a>说一下KVC和KVO</h1><p>
-        <span class="lazyload-img-span">
-        <img   
-           data-src="https://lymanli-1258009115.cos.ap-guangzhou.myqcloud.com/image/blog/kvc-kvo.jpg" >
-        </sapn>
-      <br>本篇采用简单的例子，来介绍 iOS 中的 KVC 和 KVO 的用法和实现原理。  </p>
+        <h1 id="说一下KVC和KVO"><a href="#说一下KVC和KVO" class="headerlink" title="说一下KVC和KVO"></a>说一下KVC和KVO</h1><p><img src="https://lymanli-1258009115.cos.ap-guangzhou.myqcloud.com/image/blog/kvc-kvo.jpg" alt="avatar"><br>本篇采用简单的例子，来介绍 iOS 中的 KVC 和 KVO 的用法和实现原理。  </p>
 <h1 id="一、KVC"><a href="#一、KVC" class="headerlink" title="一、KVC"></a>一、KVC</h1><h2 id="1-KVC是什么"><a href="#1-KVC是什么" class="headerlink" title="1. KVC是什么"></a>1. KVC是什么</h2><p>KVC 即 Key-Value Coding，翻译成键值编码。它是一种不通过存取方法，而通过属性名称字符串间接访问属性的机制。</p>
 <h2 id="2-KVC的用法"><a href="#2-KVC的用法" class="headerlink" title="2. KVC的用法"></a>2. KVC的用法</h2><p>KVC 常用到的方法有下面几个：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">- (id)valueForKey:(NSString *)key;  </span><br><span class="line">- (void)setValue:(nullable id)value forKey:(NSString *)key;  </span><br><span class="line">  </span><br><span class="line">- (nullable id)valueForKeyPath:(NSString *)keyPath;  </span><br><span class="line">- (void)setValue:(nullable id)value forKeyPath:(NSString *)keyPath;</span><br></pre></td></tr></table></figure>
