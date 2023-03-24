@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.15.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言 作为一名iOS app开发者，在我的工作过程中，基本遵循如下的一个流程：分析需求、UI设计——&gt;设计功能架构——&gt;着手开发——&gt;打测试包——&gt;修复bug、优化功能。 在所有这些工作中，项目打测试包对于一个开发人员来说，可以说是一项无脑又浪费时间的工作，很荣幸的是，我在公司负责iOS项目的打包。 那么来看看打包的时间都浪费在哪了。来看下打包的流程：Archive项目——">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://example.com/2023/03/24/%E4%BD%BF%E7%94%A8Fastlane%E5%AF%B9iOS%E9%A1%B9%E7%9B%AE%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90%EF%BC%88%E8%87%AA%E5%8A%A8%E6%89%93%E5%8C%85/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="前言 作为一名iOS app开发者，在我的工作过程中，基本遵循如下的一个流程：分析需求、UI设计——&gt;设计功能架构——&gt;着手开发——&gt;打测试包——&gt;修复bug、优化功能。 在所有这些工作中，项目打测试包对于一个开发人员来说，可以说是一项无脑又浪费时间的工作，很荣幸的是，我在公司负责iOS项目的打包。 那么来看看打包的时间都浪费在哪了。来看下打包的流程：Archive项目——">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1682338-2be75e344eedd459.png">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1682338-7ed82e907d636f7f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/700">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1868441-6a476ef5d297906d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1868441-d54f5fef495b6da0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1682338-241e361b6753030c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/700">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1682338-ef9ecba794bd2664.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/700">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1682338-4b01919d5ec865d7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/700">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1682338-b419e5eb2852f3ba.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/700">
+<meta property="article:published_time" content="2023-03-24T03:55:10.817Z">
+<meta property="article:modified_time" content="2023-03-24T03:55:10.818Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/1682338-2be75e344eedd459.png">
+
+
+<link rel="canonical" href="http://example.com/2023/03/24/%E4%BD%BF%E7%94%A8Fastlane%E5%AF%B9iOS%E9%A1%B9%E7%9B%AE%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90%EF%BC%88%E8%87%AA%E5%8A%A8%E6%89%93%E5%8C%85/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/2023/03/24/%E4%BD%BF%E7%94%A8Fastlane%E5%AF%B9iOS%E9%A1%B9%E7%9B%AE%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90%EF%BC%88%E8%87%AA%E5%8A%A8%E6%89%93%E5%8C%85/","path":"2023/03/24/使用Fastlane对iOS项目持续集成（自动打包/","title":""}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title> | Hexo</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Hexo</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Fastlane"><span class="nav-number">2.</span> <span class="nav-text">Fastlane</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9B%86%E6%88%90%E6%B5%81%E7%A8%8B%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95"><span class="nav-number">3.</span> <span class="nav-text">集成流程及使用方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1%E3%80%81ruby"><span class="nav-number">3.1.</span> <span class="nav-text">1、ruby</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2%E3%80%81%E5%AE%89%E8%A3%85Fastlane"><span class="nav-number">3.2.</span> <span class="nav-text">2、安装Fastlane</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3%E3%80%81%E4%B8%BA%E9%A1%B9%E7%9B%AE%E5%88%9D%E5%A7%8B%E5%8C%96Fastlane"><span class="nav-number">3.3.</span> <span class="nav-text">3、为项目初始化Fastlane</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4%E3%80%81%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AAlane"><span class="nav-number">3.4.</span> <span class="nav-text">4、创建一个lane</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4%E3%80%81%E6%89%A7%E8%A1%8C%E8%84%9A%E6%9C%AC"><span class="nav-number">3.5.</span> <span class="nav-text">4、执行脚本</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">John Doe</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/03/24/%E4%BD%BF%E7%94%A8Fastlane%E5%AF%B9iOS%E9%A1%B9%E7%9B%AE%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90%EF%BC%88%E8%87%AA%E5%8A%A8%E6%89%93%E5%8C%85/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Hexo">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2023-03-24 11:55:10" itemprop="dateCreated datePublished" datetime="2023-03-24T11:55:10+08:00">2023-03-24</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><blockquote>
+<p>作为一名iOS app开发者，在我的工作过程中，基本遵循如下的一个流程：<strong><strong>分析需求、UI设计——&gt;设计功能架构——&gt;着手开发——&gt;打测试包——&gt;修复bug、优化功能</strong></strong>。</p>
+<p>在所有这些工作中，项目打测试包对于一个开发人员来说，可以说是一项无脑又浪费时间的工作，很荣幸的是，我在公司负责iOS项目的打包。</p>
+<p>那么来看看打包的时间都浪费在哪了。来看下打包的流程：Archive项目——&gt;勾选一堆选项及下一步，打包用途、app瘦身、证书——&gt;导出ipa包——&gt;打开蒲公英——&gt;上传ipa包——&gt;填写项目描述、安装密码——&gt;发布测试包。如此这般下来，真的是被恶心吐了，手动的操作是一方面，另一方面，在进行编译项目、导出ipa、上传ipa这些操作时，则需要等待很长时间，只有等待上一步耗时操作完成，才能进行下一步，无疑很浪费时间。</p>
+<p>那么当然会有一种办法，能为我们解决这个问题，因为懒才是科技进步的第一生产力。</p>
+</blockquote>
+<h2 id="Fastlane"><a href="#Fastlane" class="headerlink" title="Fastlane"></a><a target="_blank" rel="noopener" href="https://fastlane.tools/">Fastlane</a></h2><p>这里就要引入一个概念了，叫持续集成，引用下百度百科的介绍：</p>
+<blockquote>
+<p>持续集成是一种软件开发实践，即团队开发成员经常集成他们的工作，通常每个成员每天至少集成一次，也就意味着每天可能会发生多次集成。每次集成都通过自动化的构建（包括编译，发布，自动化测试）来验证，从而尽早地发现集成错误。</p>
+</blockquote>
+<p>而今天文章的主角就是Fastlane，一套ruby编写的持续集成工具集。通过Fastlane可以实现自动打包、发布、截取app图片等工作，而Fastlane可以执行通过ruby代码或者Fastlane提供的一些工具编写的脚本来实现这些工作。以下皆以打包发布到<a target="_blank" rel="noopener" href="https://www.pgyer.com/doc/view/fastlane">蒲公英</a>为例，因为蒲公英为开发者提供了Fastlane的蒲公英插件，允许开发者通过Fastlane上传ipa包到蒲公英，fir好像也提供了Fastlane的插件，具体没去了解，如果有使用fir的，可以在回复中补充。</p>
+<p>
+        <span class="lazyload-img-span">
+        <img   
+           data-src="https://upload-images.jianshu.io/upload_images/1682338-2be75e344eedd459.png" >
+        </sapn>
+      </p>
+<h2 id="集成流程及使用方法"><a href="#集成流程及使用方法" class="headerlink" title="集成流程及使用方法"></a>集成流程及使用方法</h2><h3 id="1、ruby"><a href="#1、ruby" class="headerlink" title="1、ruby"></a>1、ruby</h3><p>因为Fastlane是ruby编写的，所以我们首先保证电脑的ruby环境有正确安装，打开终端，输入如下命令来查看ruby版本。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ruby -v</span><br></pre></td></tr></table></figure>
+<p>
+        <span class="lazyload-img-span">
+        <img   
+           data-src="https://upload-images.jianshu.io/upload_images/1682338-7ed82e907d636f7f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/700" >
+        </sapn>
+      </p>
+<p>这里保证ruby版本在2.0以上就好了。如果低于2.0，就需要升级ruby了，这里不提了，百度谷歌都有教程。</p>
+<h3 id="2、安装Fastlane"><a href="#2、安装Fastlane" class="headerlink" title="2、安装Fastlane"></a>2、安装Fastlane</h3><p>首先安装Xcode命令行工具，因为编译、打包等操作，虽然是Fastlane帮我们做的，但本质上还是通过Xcode中的构建工具来完成的。在终端中运行如下命令，则会安装Xcode命令行工具：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xcode-select --install</span><br></pre></td></tr></table></figure>
+<p>
+        <span class="lazyload-img-span">
+        <img   
+           data-src="https://upload-images.jianshu.io/upload_images/1868441-6a476ef5d297906d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" >
+        </sapn>
+      </p>
+<p>这里代表Xcode命令行工具已安装</p>
+<p>
+        <span class="lazyload-img-span">
+        <img   
+           data-src="https://upload-images.jianshu.io/upload_images/1868441-d54f5fef495b6da0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" >
+        </sapn>
+      <br>这里需要选中Xcode命令行工具</p>
+<p>
+        <span class="lazyload-img-span">
+        <img   
+           data-src="https://upload-images.jianshu.io/upload_images/1682338-241e361b6753030c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/700" >
+        </sapn>
+      </p>
+<p>然后安装Fastlane：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo gem install fastlane --verbose</span><br></pre></td></tr></table></figure>
+
+
+<p>如果发现最后报了这样的错误：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ERROR:  While executing gem ... (TypeError)</span><br><span class="line"></span><br><span class="line">    no implicit conversion of nil into String</span><br></pre></td></tr></table></figure>
+
+
+<p>则更新gem版本，然后再次安装Fastlane：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo gem update --system</span><br></pre></td></tr></table></figure>
+
+
+<p>如果报错：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ERROR:  While executing gem ... (Gem::FilePermissionError)</span><br><span class="line"></span><br><span class="line">    You don&#x27;t have write permissions for the /usr/bin directory.</span><br></pre></td></tr></table></figure>
+
+
+<p>则尝试使用如下命令进行安装：</p>
+<p>sudo gem install -n &#x2F;usr&#x2F;local&#x2F;bin fastlane</p>
+<p>如果还安装失败。。。去官网看看别的安装方法吧：<a target="_blank" rel="noopener" href="https://docs.fastlane.tools/getting-started/ios/setup/">Getting started with fastlane for iOS</a></p>
+<p>为了检查Fastlane是否成功安装，可以通过下面的命令来查看Fastlane版本号：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fastlane --version</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="3、为项目初始化Fastlane"><a href="#3、为项目初始化Fastlane" class="headerlink" title="3、为项目初始化Fastlane"></a>3、为项目初始化Fastlane</h3><p>如果Fastlane正确安装了，就可以为我们的项目初始化Fastlane了，首先通过终端，CD到项目目录，也就是项目的.xcodeproj文件所在位置。然后执行Fastlane初始化命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fastlane init</span><br></pre></td></tr></table></figure>
+
+
+<p>这里如果一直卡在bundle update，那应该就是被墙了，这时候来到项目目录下，找到Gemfile，打开Gemfile将里面的内容修改为如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#source &quot;https://rubygems.org&quot;</span><br><span class="line"></span><br><span class="line">source &quot;https://gems.ruby-china.com/&quot;</span><br><span class="line"></span><br><span class="line">gem &quot;fastlane&quot;</span><br></pre></td></tr></table></figure>
+
+
+<p>重开终端，运行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ bundle update</span><br></pre></td></tr></table></figure>
+<p>就好了。</p>
+<p>初始化结束后，会提示选择Fastlane的用途，一共是四个选项，我选了最后一个，自定义，然后打开项目目录，会发现多了一个fastlane文件夹：</p>
+<p>
+        <span class="lazyload-img-span">
+        <img   
+           data-src="https://upload-images.jianshu.io/upload_images/1682338-ef9ecba794bd2664.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/700" >
+        </sapn>
+      </p>
+<p>然后安装蒲公英插件，安装后有个y&#x2F;n的选择，选择y：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fastlane add_plugin pgyer</span><br></pre></td></tr></table></figure>
+<p>升级插件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bundle exec fastlane update_plugins</span><br></pre></td></tr></table></figure>
+<p>打开文件夹中的Fastfile，里面则是执行自动化打包任务的代码，这里我是用sublime打开的，在sublime的菜单中，找到View——&gt;Syntax中选择ruby，即可高亮代码：</p>
+<p>
+        <span class="lazyload-img-span">
+        <img   
+           data-src="https://upload-images.jianshu.io/upload_images/1682338-4b01919d5ec865d7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/700" >
+        </sapn>
+      </p>
+<h3 id="4、创建一个lane"><a href="#4、创建一个lane" class="headerlink" title="4、创建一个lane"></a>4、创建一个lane</h3><p>Fastlane以lane为单位，去执行一个自动化任务，Fastfile中的代码如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">default_platform(:ios)</span><br><span class="line"></span><br><span class="line">platform :ios do</span><br><span class="line"></span><br><span class="line">  desc &quot;Description of what the lane does&quot;</span><br><span class="line"></span><br><span class="line">  lane :custom_lane do</span><br><span class="line"></span><br><span class="line">    # add actions here: https://docs.fastlane.tools/actions</span><br><span class="line"></span><br><span class="line">  end</span><br><span class="line"></span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+
+
+<p><strong>lane：custom_lane</strong>，代表了一个叫<strong>custom_lane</strong>的任务，后面的do，则表示需要执行的操作。这里就不讲怎么写代码了（因为我也不会ruby啊！现用现找就好了），我把我项目中的Fastfile贴上来，讲解下Fastfile做了哪些事（见代码中的注释）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">default_platform(:ios)</span><br><span class="line"></span><br><span class="line">platform :ios do</span><br><span class="line">  desc &quot;Description of what the lane does&quot;</span><br><span class="line">  lane :dev do      #给lane命名</span><br><span class="line"></span><br><span class="line">#从蒲公英平台拿到的api_key和user_key，下面我会讲怎么拿到这两个key，存在下面两个变量中</span><br><span class="line">api_key = &quot;***********************&quot;</span><br><span class="line">user_key = &quot;***********************&quot;</span><br><span class="line"></span><br><span class="line">#输入蒲公英上传ipa包后输入的版本描述信息</span><br><span class="line">puts &quot;请输入版本描述：&quot;</span><br><span class="line">desc = STDIN.gets</span><br><span class="line"></span><br><span class="line">puts &quot;开始打包&quot;</span><br><span class="line"># 开始打包</span><br><span class="line">gym(</span><br><span class="line">#指定scheme的名字</span><br><span class="line">scheme: &quot;mango&quot;,</span><br><span class="line">#输出的ipa名称</span><br><span class="line">output_name:&quot;mango&quot;,</span><br><span class="line"># 是否清空以前的编译信息 true：是</span><br><span class="line">clean:true,</span><br><span class="line"># 指定打包方式，Release 或者 Debug</span><br><span class="line">configuration:&quot;Release&quot;,</span><br><span class="line"># 指定打包所使用的输出方式，目前支持app-store, package, ad-hoc, enterprise, development</span><br><span class="line">export_method:&quot;ad-hoc&quot;,</span><br><span class="line"># 指定输出文件夹，这里会保存我们最后生成的ipa文件，也就是存到了我们上面提到的fastlane文件夹中的build文件夹中</span><br><span class="line">output_directory:&quot;./build&quot;,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">puts &quot;开始上传到蒲公英&quot;</span><br><span class="line">#开始上传ipa到蒲公英，这里用的是蒲公英提供的插件</span><br><span class="line">#update_description代表更新信息，password代表安装密码</span><br><span class="line">pgyer(update_description: &quot;#&#123;desc&#125;&quot;, api_key: &quot;#&#123;api_key&#125;&quot;, user_key: &quot;#&#123;user_key&#125;&quot;, password: &quot;kltb&quot;, install_type: &quot;2&quot;)</span><br><span class="line"></span><br><span class="line">#在上传完ipa后，打开ipa的存放文件夹，起到提示上传完成的作用</span><br><span class="line">system &quot;open ../build&quot;</span><br><span class="line"></span><br><span class="line">end</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+
+<p>至于蒲公英的api_key和user_key，可以在蒲公英官网的我的应用——&gt;之前发布的应用——&gt;API中找到：</p>
+<p>
+        <span class="lazyload-img-span">
+        <img   
+           data-src="https://upload-images.jianshu.io/upload_images/1682338-b419e5eb2852f3ba.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/700" >
+        </sapn>
+      </p>
+<h3 id="4、执行脚本"><a href="#4、执行脚本" class="headerlink" title="4、执行脚本"></a>4、执行脚本</h3><p>cd到项目目录，输入如下命令来执行我们自己定义的lane，格式如下fastlane+脚本第一行中的platform名+脚本第二行中的lane名：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fastlane ios dev</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/03/24/iOS%E5%A4%9A%E7%BA%BF%E7%A8%8B/" rel="next" title="">
+                   <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
